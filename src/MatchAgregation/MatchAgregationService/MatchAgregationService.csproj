@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <ApplicationInsightsResourceId>/subscriptions/e60545a0-bf32-4549-bd98-e8ae15c82d2d/resourceGroups/ASE/providers/microsoft.insights/components/apa-ase-agregation</ApplicationInsightsResourceId>
+    <UserSecretsId>1a8be9f5-4056-4172-b143-04d8babc2e7f</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
+  </ItemGroup>
+
+
+</Project>
