@@ -1,6 +1,6 @@
 ﻿namespace MatchAgregationService.Models
 {
-    public class SportResult
+    public record SportResult
     {
         public TeamData MostWin { get; init; }
         public TeamData MostScoredPerGame { get; init; }

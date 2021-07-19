@@ -1,6 +1,6 @@
 ﻿namespace MatchAgregationService.Models
 {
-    public class TeamData
+    public record TeamData
     {
         public string Name { get; init; }
         public double Amount { get; init; }

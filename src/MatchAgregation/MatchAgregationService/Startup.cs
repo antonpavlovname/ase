@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using MatchAgregationService.Services;
+using MatchAgregationServiceTests;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,7 +22,14 @@ namespace MatchAgregationService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddApplicationInsightsTelemetry();
+
+            services.AddTransient<ISet<TeamResult>, HashSet<TeamResult>>();
+
+            services.AddSingleton<IMatchesResultLoader, MatchesResultLoader>();
+            services.AddTransient<IMatchResultClient, MatchResultClient>();
+            services.AddSingleton<ITeamResultStorage, TeamResultStorage>();
+            services.AddTransient<IResultParser, ResultParser>();
+            services.AddSingleton<ITeamStatistic, TeamStatistic>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
