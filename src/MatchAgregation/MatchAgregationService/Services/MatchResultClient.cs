@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
@@ -22,9 +22,29 @@ namespace MatchAgregationService.Services
         public async Task LoadResults(string parameterString)
         {
             _logger.LogTrace($"{nameof(LoadResults)}: [{parameterString}]");
-            using var client = new WebClient();
-            var result =
-                await client.DownloadStringTaskAsync(parameterString);
+            using var client = new HttpClient();
+            string result = null;
+            for (int attempt = 0; attempt < 5; ++attempt)
+            {
+                var response =
+                    await client.GetAsync(parameterString);
+                if (response.IsSuccessStatusCode)
+                {
+                    result = await response.Content.ReadAsStringAsync();
+                    if (result.StartsWith("["))
+                    {
+                        break;
+                    }
+                }
+                _logger.LogError($"StatusCode: [{response.StatusCode}], [{response.ReasonPhrase}], [{result}]");
+                await Task.Delay(100);
+            }
+
+            if (result == null)
+            {
+                throw new InvalidOperationException($"No response from server: [{parameterString}]");
+            }
+
             _logger.LogInformation(result);
             foreach (var teamResult in _resultParser.Parse(result)) _teamResultStorage.AddResult(teamResult);
         }
